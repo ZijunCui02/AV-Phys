@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-auto">
+<head>
+<meta charset="UTF-8">
+<title>AV-Phys Bench — Leaderboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="AV-Phys Bench — benchmarking physical commonsense in joint audio-video generation. Leaderboard, dataset, and per-prompt video gallery.">
+<link rel="stylesheet" href="/AV-Phys/style.css">
+<script>
+(function () {
+  var s = localStorage.getItem("color-scheme") || "auto";
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var useDark = s === "dark" || (s !== "light" && prefersDark);
+  var r = document.documentElement;
+  r.classList.remove("theme-auto","theme-light","theme-dark");
+  r.classList.add("theme-" + s);
+  r.classList.toggle("dark", useDark);
+})();
+</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="i-angle-right" viewBox="0 0 256 512"><path fill="currentColor" d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L178.7 256 41.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></symbol>
+<symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M16.24 22a1 1 0 0 1-1-1v-2.6a2.15 2.15 0 0 0-.54-1.66a1 1 0 0 1 .61-1.67C17.75 14.78 20 14 20 9.77a4 4 0 0 0-.67-2.22a2.75 2.75 0 0 1-.41-2.06a3.7 3.7 0 0 0 0-1.41a7.7 7.7 0 0 0-2.09 1.09a1 1 0 0 1-.84.15a10.15 10.15 0 0 0-5.52 0a1 1 0 0 1-.84-.15a7.4 7.4 0 0 0-2.11-1.09a3.5 3.5 0 0 0 0 1.41a2.84 2.84 0 0 1-.43 2.08a4.07 4.07 0 0 0-.67 2.23c0 3.89 1.88 4.93 4.7 5.29a1 1 0 0 1 .82.66a1 1 0 0 1-.21 1a2.06 2.06 0 0 0-.55 1.56V21a1 1 0 0 1-2 0v-.57a6 6 0 0 1-5.27-2.09a3.9 3.9 0 0 0-1.16-.88a1 1 0 1 1 .5-1.94a4.9 4.9 0 0 1 2 1.36c1 1 2 1.88 3.9 1.52a3.9 3.9 0 0 1 .23-1.58c-2.06-.52-5-2-5-7a6 6 0 0 1 1-3.33a.85.85 0 0 0 .13-.62a5.7 5.7 0 0 1 .33-3.21a1 1 0 0 1 .63-.57c.34-.1 1.56-.3 3.87 1.2a12.16 12.16 0 0 1 5.69 0c2.31-1.5 3.53-1.31 3.86-1.2a1 1 0 0 1 .63.57a5.7 5.7 0 0 1 .33 3.22a.75.75 0 0 0 .11.57a6 6 0 0 1 1 3.34c0 5.07-2.92 6.54-5 7a4.3 4.3 0 0 1 .22 1.67V21a1 1 0 0 1-.94 1"/></symbol>
+<symbol id="i-hf-outline" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+<circle cx="9" cy="10.6" r="1" fill="currentColor"/>
+<circle cx="15" cy="10.6" r="1" fill="currentColor"/>
+<path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M8.4 14.2c1 1.5 2.4 2.3 3.6 2.3s2.6-.8 3.6-2.3"/>
+</symbol>
+<symbol id="i-hf" viewBox="0 0 24 24"><path fill="currentColor" d="M12.025 1.13c-5.77 0-10.449 4.647-10.449 10.378c0 1.112.178 2.181.503 3.185c.064-.222.203-.444.416-.577a.96.96 0 0 1 .524-.15c.293 0 .584.124.84.284c.278.173.48.408.71.694c.226.282.458.611.684.951v-.014c.017-.324.106-.622.264-.874s.403-.487.762-.543c.3-.047.596.06.787.203s.31.313.4.467c.15.257.212.468.233.542c.01.026.653 1.552 1.657 2.54c.616.605 1.01 1.223 1.082 1.912c.055.537-.096 1.059-.38 1.572c.637.121 1.294.187 1.967.187c.657 0 1.298-.063 1.921-.178c-.287-.517-.44-1.041-.384-1.581c.07-.69.465-1.307 1.081-1.913c1.004-.987 1.647-2.513 1.657-2.539c.021-.074.083-.285.233-.542c.09-.154.208-.323.4-.467a1.08 1.08 0 0 1 .787-.203c.359.056.604.29.762.543s.247.55.265.874v.015c.225-.34.457-.67.683-.952c.23-.286.432-.52.71-.694c.257-.16.547-.284.84-.285a.97.97 0 0 1 .524.151c.228.143.373.388.43.625l.006.04a10.3 10.3 0 0 0 .534-3.273c0-5.731-4.678-10.378-10.449-10.378M8.327 6.583a1.5 1.5 0 0 1 .713.174a1.487 1.487 0 0 1 .617 2.013c-.183.343-.762-.214-1.102-.094c-.38.134-.532.914-.917.71a1.487 1.487 0 0 1 .69-2.803m7.486 0a1.487 1.487 0 0 1 .689 2.803c-.385.204-.536-.576-.916-.71c-.34-.12-.92.437-1.103.094a1.487 1.487 0 0 1 .617-2.013a1.5 1.5 0 0 1 .713-.174m-10.68 1.55a.96.96 0 1 1 0 1.921a.96.96 0 0 1 0-1.92m13.838 0a.96.96 0 1 1 0 1.92a.96.96 0 0 1 0-1.92M8.489 11.458c.588.01 1.965 1.157 3.572 1.164c1.607-.007 2.984-1.155 3.572-1.164c.196-.003.305.12.305.454c0 .886-.424 2.328-1.563 3.202c-.22-.756-1.396-1.366-1.63-1.32q-.011.001-.02.006l-.044.026l-.01.008l-.03.024q-.018.017-.035.036l-.032.04a1 1 0 0 0-.058.09l-.014.025q-.049.088-.11.19a1 1 0 0 1-.083.116a1.2 1.2 0 0 1-.173.18q-.035.029-.075.058a1.3 1.3 0 0 1-.251-.243a1 1 0 0 1-.076-.107c-.124-.193-.177-.363-.337-.444c-.034-.016-.104-.008-.2.022q-.094.03-.216.087q-.06.028-.125.063l-.13.074q-.067.04-.136.086a3 3 0 0 0-.135.096a3 3 0 0 0-.26.219a2 2 0 0 0-.12.121a2 2 0 0 0-.106.128l-.002.002a2 2 0 0 0-.09.132l-.001.001a1.2 1.2 0 0 0-.105.212q-.013.036-.024.073c-1.139-.875-1.563-2.317-1.563-3.203c0-.334.109-.457.305-.454m.836 10.354c.824-1.19.766-2.082-.365-3.194c-1.13-1.112-1.789-2.738-1.789-2.738s-.246-.945-.806-.858s-.97 1.499.202 2.362c1.173.864-.233 1.45-.685.64c-.45-.812-1.683-2.896-2.322-3.295s-1.089-.175-.938.647s2.822 2.813 2.562 3.244s-1.176-.506-1.176-.506s-2.866-2.567-3.49-1.898s.473 1.23 2.037 2.16c1.564.932 1.686 1.178 1.464 1.53s-3.675-2.511-4-1.297c-.323 1.214 3.524 1.567 3.287 2.405c-.238.839-2.71-1.587-3.216-.642c-.506.946 3.49 2.056 3.522 2.064c1.29.33 4.568 1.028 5.713-.624m5.349 0c-.824-1.19-.766-2.082.365-3.194c1.13-1.112 1.789-2.738 1.789-2.738s.246-.945.806-.858s.97 1.499-.202 2.362c-1.173.864.233 1.45.685.64c.451-.812 1.683-2.896 2.322-3.295s1.089-.175.938.647s-2.822 2.813-2.562 3.244s1.176-.506 1.176-.506s2.866-2.567 3.49-1.898s-.473 1.23-2.037 2.16c-1.564.932-1.686 1.178-1.464 1.53s3.675-2.511 4-1.297c.323 1.214-3.524 1.567-3.287 2.405c.238.839 2.71-1.587 3.216-.642c.506.946-3.49 2.056-3.522 2.064c-1.29.33-4.568 1.028-5.713-.624"/></symbol>
+<symbol id="i-arxiv" viewBox="0 0 448 512"><path fill="currentColor" d="M62.258 8.006a22.22 22.22 0 0 0-20.929 13.448c-3.404 8.169-.96 13.898 6.506 24.59c10.935 16.09 122.178 149.673 122.178 149.673l-24.619 23.038c-20.74 20.735-21.632 48.566-2.34 67.852l28.663 27.3l-79.976 98.235c-6.21 6.614-10.053 18.221-6.585 26.552a22.7 22.7 0 0 0 21.21 14.06a20.23 20.23 0 0 0 15.249-7.536l95.122-88.437L363.33 496.39a27.14 27.14 0 0 0 18.418 7.61a25.3 25.3 0 0 0 7.335-1.108a27.66 27.66 0 0 0 18.4-18.99a25.6 25.6 0 0 0-6.481-23.69L272.219 305.195l23.062-21.443c17.198-15.504 17.29-42.455.197-58.076l-25.257-24.228L357.417 98.46l.115-.133l.103-.14c7.793-10.123 11.52-17.92 7.502-27.806a36.17 36.17 0 0 0-23.647-18.37a24 24 0 0 0-3.166-.212l-.006.018a28.52 28.52 0 0 0-18.252 8.123l-.203.166l-.19.173L218.6 151.925L79.261 18.253S70.995 8.213 62.258 8.006m276.06 51.214q1.115.004 2.22.148a29.3 29.3 0 0 1 17.719 13.81c2.246 5.523 1.554 10.01-6.506 20.484L264.861 196.3l-40.882-39.22l100.68-91.304a21.77 21.77 0 0 1 13.66-6.536zM175.077 201.127L395.19 464.872c4.32 5.408 7.02 10.818 5.18 16.914a20.25 20.25 0 0 1-13.463 14.037a17.6 17.6 0 0 1-5.17.784a19.8 19.8 0 0 1-13.293-5.56l-220.15-209.694c-17.317-17.316-14.698-40.33 2.158-57.186z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 32 32"><path fill="currentColor" d="M16 12.005a4 4 0 1 1-4 4a4.005 4.005 0 0 1 4-4m0-2a6 6 0 1 0 6 6a6 6 0 0 0-6-6M5.394 6.813L6.81 5.399l3.505 3.506L8.9 10.319zM2 15.005h5v2H2zm3.394 10.193L8.9 21.692l1.414 1.414l-3.505 3.506zM15 25.005h2v5h-2zm6.687-1.9l1.414-1.414l3.506 3.506l-1.414 1.414zm3.313-8.1h5v2h-5zm-3.313-6.101l3.506-3.506l1.414 1.414l-3.506 3.506zM15 2.005h2v5h-2z"/></symbol>
+<symbol id="i-moon" viewBox="0 0 32 32"><path fill="currentColor" d="M13.503 5.414a15.076 15.076 0 0 0 11.593 18.194a11.1 11.1 0 0 1-7.975 3.39c-.138 0-.278.005-.418 0a11.094 11.094 0 0 1-3.2-21.584M14.98 3a1 1 0 0 0-.175.016a13.096 13.096 0 0 0 1.825 25.981c.164.006.328 0 .49 0a13.07 13.07 0 0 0 10.703-5.555a1.01 1.01 0 0 0-.783-1.565A13.08 13.08 0 0 1 15.89 4.38A1.015 1.015 0 0 0 14.98 3"/></symbol>
+<symbol id="i-auto" viewBox="0 0 24 24"><path fill="currentColor" d="M11 21q-3.35 0-5.675-2.325T3 13q0-1.45.475-2.762T4.8 7.888t2.037-1.725T9.426 5.3q.625-.075.975.438t.025 1.062q-.3.5-.363 1.063T10 9q0 2.5 1.75 4.25T16 15q.3 0 .6-.012t.6-.113q.525-.2.938.188t.237.912q-.725 2.35-2.8 3.688T11 21m5.4-12l-.5 1.4q-.1.275-.325.438t-.5.162q-.475 0-.737-.387t-.113-.813l2.55-7.175q.1-.275.35-.45t.55-.175h.65q.3 0 .55.175t.35.45l2.55 7.175q.15.425-.112.813t-.738.387q-.275 0-.5-.162T20.1 10.4L19.6 9zm.45-1.35h2.3L18 4z"/></symbol>
+<symbol id="i-code" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m18 16l4-4l-4-4M6 8l-4 4l4 4m8.5-12l-5 16"/></symbol>
+<symbol id="i-film" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18M3 7.5h4M3 12h18M3 16.5h4M17 3v18m0-13.5h4m-4 9h4"/></g></symbol>
+</defs>
+</svg>
+
+<header class="nav" id="navbar">
+  <a class="logo" href="/AV-Phys/" aria-label="Home">
+    <span>&gt;_AV-Phys</span><span class="blink">_</span>
+  </a>
+  <nav class="nav-links">
+      <a class="nav-item nav-active" href="/AV-Phys/">leaderboard</a>
+      <a class="nav-item" href="/AV-Phys/tl-dr/">TL;DR</a>
+      <a class="nav-item" href="/AV-Phys/videos/">videos</a>
+      <a class="nav-item" href="https://github.com/ZijunCui02/AV-Phys" target="_blank" rel="noopener noreferrer">run AV-Phys</a>
+      <a class="nav-item" href="https://github.com/ZijunCui02/AV-Phys" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
+      </a>
+      <a class="nav-item" href="https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench" target="_blank" rel="noopener noreferrer" aria-label="HuggingFace">
+        <svg class="icon" aria-hidden="true"><use href="#i-hf"/></svg>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon icon-auto" aria-hidden="true"><use href="#i-auto"/></svg>
+        <svg class="icon icon-light" aria-hidden="true"><use href="#i-sun"/></svg>
+        <svg class="icon icon-dark" aria-hidden="true"><use href="#i-moon"/></svg>
+      </button>
+  </nav>
+</header>
+
+<main>
+<article class="content wide">
+
+<section class="hero">
+  <h1 class="paper-title">Do Joint Audio-Video Generation Models Understand Physics?</h1>
+  <p class="authors">
+  <a href="https://zijuncui.com" target="_blank" rel="noopener noreferrer">Zijun&nbsp;Cui</a><sup>1,*</sup>,
+  <a href="https://dragonliu1995.github.io/" target="_blank" rel="noopener noreferrer">Xiulong&nbsp;Liu</a><sup>2,*</sup>,
+  <a href="https://apexhao.github.io/" target="_blank" rel="noopener noreferrer">Hao&nbsp;Fang</a><sup>2,*</sup>,
+  <a href="https://scholar.google.com/citations?user=jOZPNeQAAAAJ&amp;hl=zh-CN" target="_blank" rel="noopener noreferrer">Mingwei&nbsp;Xu</a><sup>2</sup>,
+  <a href="https://jiagengliu02.github.io/" target="_blank" rel="noopener noreferrer">Jiageng&nbsp;Liu</a><sup>3</sup>,
+  <a href="https://zexinxu.com/" target="_blank" rel="noopener noreferrer">Zexin&nbsp;Xu</a><sup>1</sup>,
+  <a href="https://scholar.google.com/citations?user=K-ObTwoAAAAJ&amp;hl=zh-CN" target="_blank" rel="noopener noreferrer">Weiguo&nbsp;Pian</a><sup>1</sup>,
+  <a href="https://scholar.google.com/citations?user=7LBj70IAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Shijian&nbsp;Deng</a><sup>1</sup>,
+  Feiyu&nbsp;Du<sup>1</sup>, Chenming&nbsp;Ge<sup>2</sup>,
+  <a href="https://www.yapengtian.com/" target="_blank" rel="noopener noreferrer">Yapeng&nbsp;Tian</a><sup>1,&dagger;</sup>
+</p>
+<p class="affil">
+  <sup>1</sup>&nbsp;University of Texas at Dallas &nbsp;&nbsp;
+  <sup>2</sup>&nbsp;University of Washington &nbsp;&nbsp;
+  <sup>3</sup>&nbsp;University of California, Los Angeles
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <sup>*</sup>&nbsp;Equal contribution. &nbsp;&nbsp;
+  <sup>&dagger;</sup>&nbsp;Corresponding author.
+</p>
+  <div class="badges">
+    <a class="btn" href="https://arxiv.org/abs/2605.07061" target="_blank" rel="noopener noreferrer">
+      <svg class="icon"><use href="#i-arxiv"/></svg><span>arXiv</span>
+    </a>
+    <a class="btn" href="https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench" target="_blank" rel="noopener noreferrer">
+      <svg class="icon"><use href="#i-hf"/></svg><span>HF Dataset</span>
+    </a>
+    <a class="btn" href="https://github.com/ZijunCui02/AV-Phys" target="_blank" rel="noopener noreferrer">
+      <svg class="icon"><use href="#i-code"/></svg><span>Code</span>
+    </a>
+    <a class="btn" href="/AV-Phys/videos/">
+      <svg class="icon"><use href="#i-film"/></svg><span>Videos</span>
+    </a>
+  </div>
+  <p class="lede">AV-Phys Bench is first comprehensive benchmark for evaluating <em>physical commonsense</em> in joint audio-video generation. AV-Phys Bench systematically tests joint audio-video generation models across three scene categories that probe how physical commonsense holds as the scene evolves: <strong>(a) Steady State</strong>, <strong>(b) Event Transition</strong>, and <strong>(c) Environment Transition</strong>. 7 models are evaluated by humans, an MLLM-as-judge baseline, and the AV-Phys Agent.</p>
+</section>
+
+<section class="teaser">
+  <div class="teaser-grid">
+    <figure class="teaser-card">
+      <div class="teaser-media">
+        <video controls preload="metadata" playsinline poster="/AV-Phys/assets/thumbs/Seedance-2.0/C2-2-20.webp">
+          <source src="https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench/resolve/main/videos/Seedance-2.0/C2-2-20.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption class="teaser-label">
+        <span class="teaser-model">Seedance 2.0</span>
+        <span class="teaser-mark pass" aria-label="passes physics test">&check;</span>
+      </figcaption>
+    </figure>
+    <figure class="teaser-card">
+      <div class="teaser-media">
+        <video controls preload="metadata" playsinline poster="/AV-Phys/assets/thumbs/Kling-3.0-Omni/C2-2-20.webp">
+          <source src="https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench/resolve/main/videos/Kling-3.0-Omni/C2-2-20.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption class="teaser-label">
+        <span class="teaser-model">Kling 3.0 Omni</span>
+        <span class="teaser-mark fail" aria-label="fails physics test">&times;</span>
+      </figcaption>
+    </figure>
+    <figure class="teaser-card">
+      <div class="teaser-media">
+        <video controls preload="metadata" playsinline poster="/AV-Phys/assets/thumbs/Veo-3.1/C2-2-20.webp">
+          <source src="https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench/resolve/main/videos/Veo-3.1/C2-2-20.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption class="teaser-label">
+        <span class="teaser-model">Veo 3.1</span>
+        <span class="teaser-mark fail" aria-label="fails physics test">&times;</span>
+      </figcaption>
+    </figure>
+  </div>
+  <p class="teaser-prompt">
+    <span class="quot">&ldquo;</span>A speaker plays <strong>music</strong> at <strong>low volume</strong>, sounding quiet and thin. Then the volume knob is <strong>turned up</strong> gradually until the <strong>music</strong> fills the room.<span class="quot">&rdquo;</span>
+    <a class="teaser-link" href="/AV-Phys/videos/C2-2-20/">C2-2-20 ↗</a>
+  </p>
+</section>
+
+<h2 id="lb">Leaderboard</h2>
+
+<div class="lb-controls">
+  <div class="group">
+    <span class="group-label">Evaluator</span>
+    <div class="seg" id="eval-toggle">
+      <button data-et="human" class="on">Human</button>
+      <button data-et="agent_av">AV-Phys Agent</button>
+      <button data-et="mllm">MLLM judge</button>
+    </div>
+  </div>
+  <div class="group">
+    <span class="group-label">Subset</span>
+    <div class="seg" id="partition-toggle">
+        <button data-partition="physics" class=on>Physics-following</button>
+        <button data-partition="overall">Overall</button>
+        <button data-partition="C1">C1 Steady State</button>
+        <button data-partition="C2">C2 Event Transition</button>
+        <button data-partition="C3">C3 Environment Transition</button>
+        <button data-partition="anti">Anti-Physics</button>
+    </div>
+  </div>
+</div>
+
+<div class="lb-table-wrap">
+  <table class="leaderboard" id="lb-table">
+    <thead>
+      <tr>
+        <th class="num">#</th>
+        <th>Model</th>
+        <th class="num">SA</th>
+        <th class="num">PC</th>
+        <th class="num">Both</th>
+        <th class="num"><span class="dim">V-SA</span></th>
+        <th class="num"><span class="dim">A-SA</span></th>
+        <th class="num"><span class="dim">V-PC</span></th>
+        <th class="num"><span class="dim">A-PC</span></th>
+        <th class="num"><span class="dim">AV-PC</span></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+<p class="lb-note">
+  All numbers are pass-rates in [0, 1]. <strong>SA</strong> = semantic adherence (V-SA ∧ A-SA);
+  <strong>PC</strong> = physical commonsense (V-PC ∧ A-PC ∧ AV-PC); <strong>Both</strong> = SA ∧ PC.
+  Headline values match Table 3 of the paper on the <em>Physics-following</em> subset.
+</p>
+
+<h2 id="taxonomy">Taxonomy</h2>
+<p class="muted">
+  Prompts are organized on a <strong>scene-evolution axis</strong>: what changes in the scene from start to end.
+  Each top category has a 4th <em>Anti-Physics</em> subcategory that deliberately violates a physical principle —
+  a stress test for whether the model executes the instruction or defaults to plausible priors.
+</p>
+
+<div class="tax-grid">
+  <a class="tax-card" href="/AV-Phys/videos/?cat=C1">
+    <div class="tax-head"><span class="tax-code">C1</span><span class="tax-name">Steady State</span></div>
+    <p class="tax-count">159 prompts · source, action, environment all fixed</p>
+    <p class="tax-subs"><code>C1-1</code> source_material · <code>C1-2</code> source_anchoring · <code>C1-3</code> sound_persistence · <code>C1-4</code> <span class="anti-tag">anti</span></p>
+  </a>
+  <a class="tax-card" href="/AV-Phys/videos/?cat=C2">
+    <div class="tax-head"><span class="tax-code">C2</span><span class="tax-name">Event Transition</span></div>
+    <p class="tax-count">119 prompts · a discrete action changes the source state</p>
+    <p class="tax-subs"><code>C2-1</code> source_body · <code>C2-2</code> source_excitation · <code>C2-3</code> source_radiation · <code>C2-4</code> <span class="anti-tag">anti</span></p>
+  </a>
+  <a class="tax-card" href="/AV-Phys/videos/?cat=C3">
+    <div class="tax-head"><span class="tax-code">C3</span><span class="tax-name">Environment Transition</span></div>
+    <p class="tax-count">43 prompts · source fixed, propagation path changes</p>
+    <p class="tax-subs"><code>C3-1</code> propagation_medium · <code>C3-2</code> enclosure_geometry · <code>C3-3</code> sound_attenuation · <code>C3-4</code> <span class="anti-tag">anti</span></p>
+  </a>
+</div>
+
+<h2 id="run">Run AV-Phys on your own model</h2>
+<p class="muted">
+  Each prompt comes with a hand-authored rubric of 8.6 ± Y/N statements on average. Drop your model's
+  outputs into <code>videos/&lt;your-model&gt;/&lt;INDEX&gt;.mp4</code> and the AV-Phys Agent will score them
+  against the rubric on 5 dimensions.
+</p>
+<div class="code-block">
+  <span class="lang">bash</span>
+  <code><span class="cm"># 1. clone the umbrella repo and enter the eval harness</span>
+git clone https://github.com/ZijunCui02/AV-Phys
+cd AV-Phys/code
+
+<span class="cm"># 2. fetch the dataset (prompts + rubrics + videos) from HuggingFace</span>
+huggingface-cli download ZijunCui/AV-Phys-Bench --repo-type=dataset --local-dir data_release
+
+<span class="cm"># 3. generate one .mp4 per prompt into data_release/videos/&lt;your-model&gt;/</span>
+<span class="cm"># 4. follow code/README.md to run the AV-Phys Agent evaluator on your model</span></code>
+  <button class="copy-btn">Copy</button>
+</div>
+
+<script id="lb-data" type="application/json">{"human":{"Seedance-2.0":{"physics":{"video_sa":0.9402985074626866,"audio_sa":0.9328358208955224,"video_pc":0.8395522388059702,"audio_pc":0.7686567164179104,"av_pc":0.75,"SA":0.9029850746268657,"PC":0.6604477611940298,"Both":0.6529850746268657},"overall":{"video_sa":0.9221183800623053,"audio_sa":0.9127725856697819,"video_pc":0.8286604361370716,"audio_pc":0.719626168224299,"av_pc":0.7227414330218068,"SA":0.8691588785046729,"PC":0.5856697819314641,"Both":0.5794392523364486},"C1":{"video_sa":0.968503937007874,"audio_sa":0.9212598425196851,"video_pc":0.8976377952755905,"audio_pc":0.8740157480314961,"av_pc":0.8582677165354331,"SA":0.905511811023622,"PC":0.7322834645669292,"Both":0.7165354330708661},"C2":{"video_sa":0.9047619047619048,"audio_sa":0.9238095238095239,"video_pc":0.7428571428571429,"audio_pc":0.6476190476190476,"av_pc":0.6190476190476191,"SA":0.8857142857142857,"PC":0.5523809523809524,"Both":0.5523809523809524},"C3":{"video_sa":0.9444444444444444,"audio_sa":1.0,"video_pc":0.9166666666666666,"audio_pc":0.75,"av_pc":0.75,"SA":0.9444444444444444,"PC":0.7222222222222222,"Both":0.7222222222222222},"anti":{"video_sa":0.8301886792452831,"audio_sa":0.8113207547169812,"video_pc":0.7735849056603774,"audio_pc":0.4716981132075472,"av_pc":0.5849056603773585,"SA":0.6981132075471698,"PC":0.20754716981132076,"Both":0.20754716981132076}},"Kling-3.0-Omni":{"physics":{"video_sa":0.9253731343283582,"audio_sa":0.8395522388059702,"video_pc":0.7164179104477612,"audio_pc":0.48880597014925375,"av_pc":0.5559701492537313,"SA":0.8059701492537313,"PC":0.34328358208955223,"Both":0.3358208955223881},"overall":{"video_sa":0.9127725856697819,"audio_sa":0.8317757009345794,"video_pc":0.7258566978193146,"audio_pc":0.4766355140186916,"av_pc":0.557632398753894,"SA":0.7850467289719626,"PC":0.3177570093457944,"Both":0.3115264797507788},"C1":{"video_sa":0.9448818897637795,"audio_sa":0.8740157480314961,"video_pc":0.7480314960629921,"audio_pc":0.6062992125984252,"av_pc":0.6850393700787402,"SA":0.8346456692913385,"PC":0.4330708661417323,"Both":0.41732283464566927},"C2":{"video_sa":0.9047619047619048,"audio_sa":0.780952380952381,"video_pc":0.7047619047619048,"audio_pc":0.3904761904761905,"av_pc":0.4380952380952381,"SA":0.7523809523809524,"PC":0.26666666666666666,"Both":0.26666666666666666},"C3":{"video_sa":0.9166666666666666,"audio_sa":0.8888888888888888,"video_pc":0.6388888888888888,"audio_pc":0.3611111111111111,"av_pc":0.4444444444444444,"SA":0.8611111111111112,"PC":0.25,"Both":0.25},"anti":{"video_sa":0.8490566037735849,"audio_sa":0.7924528301886793,"video_pc":0.7735849056603774,"audio_pc":0.41509433962264153,"av_pc":0.5660377358490566,"SA":0.6792452830188679,"PC":0.18867924528301888,"Both":0.18867924528301888}},"Veo-3.1":{"physics":{"video_sa":0.8768656716417911,"audio_sa":0.8507462686567164,"video_pc":0.5186567164179104,"audio_pc":0.4253731343283582,"av_pc":0.4216417910447761,"SA":0.7910447761194029,"PC":0.21641791044776118,"Both":0.2126865671641791},"overall":{"video_sa":0.8504672897196262,"audio_sa":0.8317757009345794,"video_pc":0.5109034267912772,"audio_pc":0.4143302180685358,"av_pc":0.42990654205607476,"SA":0.7601246105919003,"PC":0.19937694704049844,"Both":0.19626168224299065},"C1":{"video_sa":0.8976377952755905,"audio_sa":0.8267716535433071,"video_pc":0.5118110236220472,"audio_pc":0.6220472440944882,"av_pc":0.6456692913385826,"SA":0.7874015748031497,"PC":0.31496062992125984,"Both":0.30708661417322836},"C2":{"video_sa":0.8571428571428571,"audio_sa":0.8857142857142857,"video_pc":0.4857142857142857,"audio_pc":0.26666666666666666,"av_pc":0.20952380952380953,"SA":0.819047619047619,"PC":0.12380952380952381,"Both":0.12380952380952381},"C3":{"video_sa":0.8611111111111112,"audio_sa":0.8333333333333334,"video_pc":0.6388888888888888,"audio_pc":0.19444444444444445,"av_pc":0.25,"SA":0.7222222222222222,"PC":0.1388888888888889,"Both":0.1388888888888889},"anti":{"video_sa":0.7169811320754716,"audio_sa":0.7358490566037735,"video_pc":0.4716981132075472,"audio_pc":0.3584905660377358,"av_pc":0.4716981132075472,"SA":0.6037735849056604,"PC":0.11320754716981132,"Both":0.11320754716981132}},"LTX-2.3":{"physics":{"video_sa":0.5186567164179104,"audio_sa":0.5634328358208955,"video_pc":0.2947761194029851,"audio_pc":0.20522388059701493,"av_pc":0.23880597014925373,"SA":0.39925373134328357,"PC":0.09701492537313433,"Both":0.08582089552238806},"overall":{"video_sa":0.5077881619937694,"audio_sa":0.5638629283489096,"video_pc":0.2897196261682243,"audio_pc":0.21806853582554517,"av_pc":0.2398753894080997,"SA":0.3894080996884735,"PC":0.08722741433021806,"Both":0.0778816199376947},"C1":{"video_sa":0.5669291338582677,"audio_sa":0.5354330708661418,"video_pc":0.4015748031496063,"audio_pc":0.3228346456692913,"av_pc":0.3700787401574803,"SA":0.4251968503937008,"PC":0.14960629921259844,"Both":0.12598425196850394},"C2":{"video_sa":0.49523809523809526,"audio_sa":0.5714285714285714,"video_pc":0.18095238095238095,"audio_pc":0.08571428571428572,"av_pc":0.12380952380952381,"SA":0.38095238095238093,"PC":0.02857142857142857,"Both":0.02857142857142857},"C3":{"video_sa":0.4166666666666667,"audio_sa":0.6388888888888888,"video_pc":0.25,"audio_pc":0.1388888888888889,"av_pc":0.1111111111111111,"SA":0.3611111111111111,"PC":0.1111111111111111,"Both":0.1111111111111111},"anti":{"video_sa":0.4528301886792453,"audio_sa":0.5660377358490566,"video_pc":0.2641509433962264,"audio_pc":0.2830188679245283,"av_pc":0.24528301886792453,"SA":0.33962264150943394,"PC":0.03773584905660377,"Both":0.03773584905660377}},"Ovi":{"physics":{"video_sa":0.3246268656716418,"audio_sa":0.35074626865671643,"video_pc":0.12313432835820895,"audio_pc":0.08582089552238806,"av_pc":0.0708955223880597,"SA":0.208955223880597,"PC":0.011194029850746268,"Both":0.007462686567164179},"overall":{"video_sa":0.3426791277258567,"audio_sa":0.37694704049844235,"video_pc":0.13707165109034267,"audio_pc":0.11838006230529595,"av_pc":0.07476635514018691,"SA":0.21806853582554517,"PC":0.018691588785046728,"Both":0.01557632398753894},"C1":{"video_sa":0.33858267716535434,"audio_sa":0.25984251968503935,"video_pc":0.1732283464566929,"audio_pc":0.13385826771653545,"av_pc":0.11023622047244094,"SA":0.1889763779527559,"PC":0.007874015748031496,"Both":0.0},"C2":{"video_sa":0.3523809523809524,"audio_sa":0.44761904761904764,"video_pc":0.08571428571428572,"audio_pc":0.05714285714285714,"av_pc":0.0380952380952381,"SA":0.2571428571428571,"PC":0.01904761904761905,"Both":0.01904761904761905},"C3":{"video_sa":0.19444444444444445,"audio_sa":0.3888888888888889,"video_pc":0.05555555555555555,"audio_pc":0.0,"av_pc":0.027777777777777776,"SA":0.1388888888888889,"PC":0.0,"Both":0.0},"anti":{"video_sa":0.4339622641509434,"audio_sa":0.5094339622641509,"video_pc":0.20754716981132076,"audio_pc":0.2830188679245283,"av_pc":0.09433962264150944,"SA":0.2641509433962264,"PC":0.05660377358490566,"Both":0.05660377358490566}},"JavisDiT++":{"physics":{"video_sa":0.23507462686567165,"audio_sa":0.3246268656716418,"video_pc":0.06343283582089553,"audio_pc":0.08582089552238806,"av_pc":0.018656716417910446,"SA":0.13805970149253732,"PC":0.0,"Both":0.0},"overall":{"video_sa":0.24299065420560748,"audio_sa":0.35514018691588783,"video_pc":0.07165109034267912,"audio_pc":0.11838006230529595,"av_pc":0.018691588785046728,"SA":0.1526479750778816,"PC":0.0,"Both":0.0},"C1":{"video_sa":0.25984251968503935,"audio_sa":0.28346456692913385,"video_pc":0.11023622047244094,"audio_pc":0.15748031496062992,"av_pc":0.03937007874015748,"SA":0.14173228346456693,"PC":0.0,"Both":0.0},"C2":{"video_sa":0.22857142857142856,"audio_sa":0.37142857142857144,"video_pc":0.02857142857142857,"audio_pc":0.01904761904761905,"av_pc":0.0,"SA":0.1523809523809524,"PC":0.0,"Both":0.0},"C3":{"video_sa":0.16666666666666666,"audio_sa":0.3333333333333333,"video_pc":0.0,"audio_pc":0.027777777777777776,"av_pc":0.0,"SA":0.08333333333333333,"PC":0.0,"Both":0.0},"anti":{"video_sa":0.2830188679245283,"audio_sa":0.5094339622641509,"video_pc":0.11320754716981132,"audio_pc":0.2830188679245283,"av_pc":0.018867924528301886,"SA":0.22641509433962265,"PC":0.0,"Both":0.0}},"MagiHuman":{"physics":{"video_sa":0.11567164179104478,"audio_sa":0.19776119402985073,"video_pc":0.05223880597014925,"audio_pc":0.06716417910447761,"av_pc":0.04477611940298507,"SA":0.08582089552238806,"PC":0.0037313432835820895,"Both":0.0037313432835820895},"overall":{"video_sa":0.16199376947040497,"audio_sa":0.23052959501557632,"video_pc":0.07476635514018691,"audio_pc":0.08099688473520249,"av_pc":0.06230529595015576,"SA":0.10903426791277258,"PC":0.012461059190031152,"Both":0.012461059190031152},"C1":{"video_sa":0.1889763779527559,"audio_sa":0.25984251968503935,"video_pc":0.09448818897637795,"audio_pc":0.12598425196850394,"av_pc":0.09448818897637795,"SA":0.12598425196850394,"PC":0.007874015748031496,"Both":0.007874015748031496},"C2":{"video_sa":0.047619047619047616,"audio_sa":0.13333333333333333,"video_pc":0.0,"audio_pc":0.009523809523809525,"av_pc":0.0,"SA":0.047619047619047616,"PC":0.0,"Both":0.0},"C3":{"video_sa":0.05555555555555555,"audio_sa":0.16666666666666666,"video_pc":0.05555555555555555,"audio_pc":0.027777777777777776,"av_pc":0.0,"SA":0.05555555555555555,"PC":0.0,"Both":0.0},"anti":{"video_sa":0.39622641509433965,"audio_sa":0.39622641509433965,"video_pc":0.18867924528301888,"audio_pc":0.1509433962264151,"av_pc":0.1509433962264151,"SA":0.22641509433962265,"PC":0.05660377358490566,"Both":0.05660377358490566}}},"agent_av":{"Seedance-2.0":{"physics":{"video_sa":0.753731343283582,"audio_sa":0.7201492537313433,"video_pc":0.4664179104477612,"audio_pc":0.39552238805970147,"av_pc":0.3208955223880597,"SA":0.6007462686567164,"PC":0.1791044776119403,"Both":0.16417910447761194},"overall":{"video_sa":0.7445482866043613,"audio_sa":0.7071651090342679,"video_pc":0.4672897196261682,"audio_pc":0.37383177570093457,"av_pc":0.2897196261682243,"SA":0.5794392523364486,"PC":0.16199376947040497,"Both":0.14641744548286603},"C1":{"video_sa":0.8110236220472441,"audio_sa":0.6456692913385826,"video_pc":0.4881889763779528,"audio_pc":0.49606299212598426,"av_pc":0.33858267716535434,"SA":0.5748031496062992,"PC":0.14960629921259844,"Both":0.13385826771653545},"C2":{"video_sa":0.6952380952380952,"audio_sa":0.7904761904761904,"video_pc":0.44761904761904764,"audio_pc":0.29523809523809524,"av_pc":0.29523809523809524,"SA":0.6190476190476191,"PC":0.20952380952380953,"Both":0.2},"C3":{"video_sa":0.7222222222222222,"audio_sa":0.7777777777777778,"video_pc":0.4444444444444444,"audio_pc":0.3333333333333333,"av_pc":0.3333333333333333,"SA":0.6388888888888888,"PC":0.19444444444444445,"Both":0.16666666666666666},"anti":{"video_sa":0.6981132075471698,"audio_sa":0.6415094339622641,"video_pc":0.4716981132075472,"audio_pc":0.2641509433962264,"av_pc":0.1320754716981132,"SA":0.4716981132075472,"PC":0.07547169811320754,"Both":0.05660377358490566}},"Kling-3.0-Omni":{"physics":{"video_sa":0.8208955223880597,"audio_sa":0.7723880597014925,"video_pc":0.458955223880597,"audio_pc":0.3656716417910448,"av_pc":0.2574626865671642,"SA":0.6940298507462687,"PC":0.1455223880597015,"Both":0.13432835820895522},"overall":{"video_sa":0.8161993769470405,"audio_sa":0.7289719626168224,"video_pc":0.46105919003115264,"audio_pc":0.34890965732087226,"av_pc":0.24922118380062305,"SA":0.6448598130841121,"PC":0.14330218068535824,"Both":0.12149532710280374},"C1":{"video_sa":0.8582677165354331,"audio_sa":0.7165354330708661,"video_pc":0.49606299212598426,"audio_pc":0.4881889763779528,"av_pc":0.33070866141732286,"SA":0.6614173228346457,"PC":0.1889763779527559,"Both":0.16535433070866143},"C2":{"video_sa":0.8,"audio_sa":0.819047619047619,"video_pc":0.4380952380952381,"audio_pc":0.26666666666666666,"av_pc":0.19047619047619047,"SA":0.7333333333333333,"PC":0.12380952380952381,"Both":0.12380952380952381},"C3":{"video_sa":0.75,"audio_sa":0.8333333333333334,"video_pc":0.3888888888888889,"audio_pc":0.2222222222222222,"av_pc":0.19444444444444445,"SA":0.6944444444444444,"PC":0.05555555555555555,"Both":0.05555555555555555},"anti":{"video_sa":0.7924528301886793,"audio_sa":0.5094339622641509,"video_pc":0.4716981132075472,"audio_pc":0.2641509433962264,"av_pc":0.20754716981132076,"SA":0.39622641509433965,"PC":0.1320754716981132,"Both":0.05660377358490566}},"Veo-3.1":{"physics":{"video_sa":0.8171641791044776,"audio_sa":0.6977611940298507,"video_pc":0.3917910447761194,"audio_pc":0.3582089552238806,"av_pc":0.27611940298507465,"SA":0.6156716417910447,"PC":0.13059701492537312,"Both":0.11940298507462686},"overall":{"video_sa":0.7850467289719626,"audio_sa":0.6728971962616822,"video_pc":0.3925233644859813,"audio_pc":0.35514018691588783,"av_pc":0.26479750778816197,"SA":0.5763239875389408,"PC":0.13395638629283488,"Both":0.11838006230529595},"C1":{"video_sa":0.8346456692913385,"audio_sa":0.6614173228346457,"video_pc":0.4251968503937008,"audio_pc":0.5039370078740157,"av_pc":0.3543307086614173,"SA":0.5905511811023622,"PC":0.14173228346456693,"Both":0.11811023622047244},"C2":{"video_sa":0.819047619047619,"audio_sa":0.7523809523809524,"video_pc":0.3619047619047619,"audio_pc":0.21904761904761905,"av_pc":0.2,"SA":0.6761904761904762,"PC":0.12380952380952381,"Both":0.12380952380952381},"C3":{"video_sa":0.75,"audio_sa":0.6666666666666666,"video_pc":0.3611111111111111,"audio_pc":0.25,"av_pc":0.2222222222222222,"SA":0.5277777777777778,"PC":0.1111111111111111,"Both":0.1111111111111111},"anti":{"video_sa":0.6226415094339622,"audio_sa":0.5471698113207547,"video_pc":0.39622641509433965,"audio_pc":0.33962264150943394,"av_pc":0.20754716981132076,"SA":0.37735849056603776,"PC":0.1509433962264151,"Both":0.11320754716981132}},"LTX-2.3":{"physics":{"video_sa":0.3917910447761194,"audio_sa":0.4962686567164179,"video_pc":0.13432835820895522,"audio_pc":0.208955223880597,"av_pc":0.1044776119402985,"SA":0.26492537313432835,"PC":0.022388059701492536,"Both":0.022388059701492536},"overall":{"video_sa":0.38006230529595014,"audio_sa":0.470404984423676,"video_pc":0.13707165109034267,"audio_pc":0.205607476635514,"av_pc":0.10903426791277258,"SA":0.2398753894080997,"PC":0.024922118380062305,"Both":0.021806853582554516},"C1":{"video_sa":0.4330708661417323,"audio_sa":0.5039370078740157,"video_pc":0.15748031496062992,"audio_pc":0.36220472440944884,"av_pc":0.1732283464566929,"SA":0.2755905511811024,"PC":0.031496062992125984,"Both":0.031496062992125984},"C2":{"video_sa":0.37142857142857144,"audio_sa":0.4666666666666667,"video_pc":0.11428571428571428,"audio_pc":0.0761904761904762,"av_pc":0.02857142857142857,"SA":0.24761904761904763,"PC":0.009523809523809525,"Both":0.009523809523809525},"C3":{"video_sa":0.3055555555555556,"audio_sa":0.5555555555555556,"video_pc":0.1111111111111111,"audio_pc":0.05555555555555555,"av_pc":0.08333333333333333,"SA":0.2777777777777778,"PC":0.027777777777777776,"Both":0.027777777777777776},"anti":{"video_sa":0.32075471698113206,"audio_sa":0.33962264150943394,"video_pc":0.1509433962264151,"audio_pc":0.18867924528301888,"av_pc":0.1320754716981132,"SA":0.11320754716981132,"PC":0.03773584905660377,"Both":0.018867924528301886}},"Ovi":{"physics":{"video_sa":0.4141791044776119,"audio_sa":0.48507462686567165,"video_pc":0.12313432835820895,"audio_pc":0.22014925373134328,"av_pc":0.13059701492537312,"SA":0.2798507462686567,"PC":0.05223880597014925,"Both":0.04477611940298507},"overall":{"video_sa":0.3925233644859813,"audio_sa":0.4735202492211838,"video_pc":0.13707165109034267,"audio_pc":0.21806853582554517,"av_pc":0.11838006230529595,"SA":0.2585669781931464,"PC":0.0529595015576324,"Both":0.04672897196261682},"C1":{"video_sa":0.5118110236220472,"audio_sa":0.4251968503937008,"video_pc":0.1732283464566929,"audio_pc":0.3543307086614173,"av_pc":0.2204724409448819,"SA":0.29133858267716534,"PC":0.08661417322834646,"Both":0.07086614173228346},"C2":{"video_sa":0.37142857142857144,"audio_sa":0.5428571428571428,"video_pc":0.06666666666666667,"audio_pc":0.12380952380952381,"av_pc":0.06666666666666667,"SA":0.29523809523809524,"PC":0.02857142857142857,"Both":0.02857142857142857},"C3":{"video_sa":0.19444444444444445,"audio_sa":0.5277777777777778,"video_pc":0.1111111111111111,"audio_pc":0.027777777777777776,"av_pc":0.0,"SA":0.19444444444444445,"PC":0.0,"Both":0.0},"anti":{"video_sa":0.2830188679245283,"audio_sa":0.41509433962264153,"video_pc":0.20754716981132076,"audio_pc":0.20754716981132076,"av_pc":0.05660377358490566,"SA":0.1509433962264151,"PC":0.05660377358490566,"Both":0.05660377358490566}},"JavisDiT++":{"physics":{"video_sa":0.35447761194029853,"audio_sa":0.5373134328358209,"video_pc":0.11567164179104478,"audio_pc":0.21641791044776118,"av_pc":0.08582089552238806,"SA":0.2574626865671642,"PC":0.029850746268656716,"Both":0.026119402985074626},"overall":{"video_sa":0.35202492211838005,"audio_sa":0.5202492211838006,"video_pc":0.1277258566978193,"audio_pc":0.22429906542056074,"av_pc":0.09034267912772585,"SA":0.24922118380062305,"PC":0.040498442367601244,"Both":0.03115264797507788},"C1":{"video_sa":0.44881889763779526,"audio_sa":0.5196850393700787,"video_pc":0.18110236220472442,"audio_pc":0.3779527559055118,"av_pc":0.1732283464566929,"SA":0.2755905511811024,"PC":0.06299212598425197,"Both":0.05511811023622047},"C2":{"video_sa":0.2571428571428571,"audio_sa":0.5619047619047619,"video_pc":0.06666666666666667,"audio_pc":0.08571428571428572,"av_pc":0.009523809523809525,"SA":0.23809523809523808,"PC":0.0,"Both":0.0},"C3":{"video_sa":0.3055555555555556,"audio_sa":0.5277777777777778,"video_pc":0.027777777777777776,"audio_pc":0.027777777777777776,"av_pc":0.0,"SA":0.25,"PC":0.0,"Both":0.0},"anti":{"video_sa":0.33962264150943394,"audio_sa":0.4339622641509434,"video_pc":0.18867924528301888,"audio_pc":0.2641509433962264,"av_pc":0.11320754716981132,"SA":0.20754716981132076,"PC":0.09433962264150944,"Both":0.05660377358490566}},"MagiHuman":{"physics":{"video_sa":0.3208955223880597,"audio_sa":0.3843283582089552,"video_pc":0.1417910447761194,"audio_pc":0.19776119402985073,"av_pc":0.08955223880597014,"SA":0.1828358208955224,"PC":0.033582089552238806,"Both":0.026119402985074626},"overall":{"video_sa":0.3426791277258567,"audio_sa":0.38006230529595014,"video_pc":0.16510903426791276,"audio_pc":0.2118380062305296,"av_pc":0.09968847352024922,"SA":0.19003115264797507,"PC":0.04361370716510903,"Both":0.03426791277258567},"C1":{"video_sa":0.4409448818897638,"audio_sa":0.3700787401574803,"video_pc":0.2047244094488189,"audio_pc":0.30708661417322836,"av_pc":0.14173228346456693,"SA":0.2047244094488189,"PC":0.05511811023622047,"Both":0.03937007874015748},"C2":{"video_sa":0.20952380952380953,"audio_sa":0.3523809523809524,"video_pc":0.08571428571428572,"audio_pc":0.10476190476190476,"av_pc":0.02857142857142857,"SA":0.1619047619047619,"PC":0.009523809523809525,"Both":0.009523809523809525},"C3":{"video_sa":0.2222222222222222,"audio_sa":0.5277777777777778,"video_pc":0.08333333333333333,"audio_pc":0.08333333333333333,"av_pc":0.08333333333333333,"SA":0.16666666666666666,"PC":0.027777777777777776,"Both":0.027777777777777776},"anti":{"video_sa":0.4528301886792453,"audio_sa":0.3584905660377358,"video_pc":0.2830188679245283,"audio_pc":0.2830188679245283,"av_pc":0.1509433962264151,"SA":0.22641509433962265,"PC":0.09433962264150944,"Both":0.07547169811320754}}},"mllm":{"Seedance-2.0":{"physics":{"video_sa":0.8992537313432836,"audio_sa":0.9701492537313433,"video_pc":0.6791044776119403,"audio_pc":0.7947761194029851,"av_pc":0.7574626865671642,"SA":0.8731343283582089,"PC":0.5671641791044776,"Both":0.5447761194029851},"overall":{"video_sa":0.897196261682243,"audio_sa":0.9221183800623053,"video_pc":0.6791277258566978,"audio_pc":0.7725856697819314,"av_pc":0.7165109034267912,"SA":0.8255451713395638,"PC":0.5327102803738317,"Both":0.49221183800623053},"C1":{"video_sa":0.905511811023622,"audio_sa":0.952755905511811,"video_pc":0.6692913385826772,"audio_pc":0.84251968503937,"av_pc":0.7795275590551181,"SA":0.8661417322834646,"PC":0.5590551181102362,"Both":0.5354330708661418},"C2":{"video_sa":0.9142857142857143,"audio_sa":0.9904761904761905,"video_pc":0.6761904761904762,"audio_pc":0.7428571428571429,"av_pc":0.7333333333333333,"SA":0.9047619047619048,"PC":0.5619047619047619,"Both":0.5428571428571428},"C3":{"video_sa":0.8333333333333334,"audio_sa":0.9722222222222222,"video_pc":0.7222222222222222,"audio_pc":0.7777777777777778,"av_pc":0.75,"SA":0.8055555555555556,"PC":0.6111111111111112,"Both":0.5833333333333334},"anti":{"video_sa":0.8867924528301887,"audio_sa":0.6792452830188679,"video_pc":0.6792452830188679,"audio_pc":0.660377358490566,"av_pc":0.5094339622641509,"SA":0.5849056603773585,"PC":0.3584905660377358,"Both":0.22641509433962265}},"Kling-3.0-Omni":{"physics":{"video_sa":0.9253731343283582,"audio_sa":0.914179104477612,"video_pc":0.6305970149253731,"audio_pc":0.7313432835820896,"av_pc":0.7052238805970149,"SA":0.8619402985074627,"PC":0.48507462686567165,"Both":0.4701492537313433},"overall":{"video_sa":0.9096573208722741,"audio_sa":0.8691588785046729,"video_pc":0.6386292834890965,"audio_pc":0.7165109034267912,"av_pc":0.660436137071651,"SA":0.8068535825545171,"PC":0.46417445482866043,"Both":0.4174454828660436},"C1":{"video_sa":0.9606299212598425,"audio_sa":0.9212598425196851,"video_pc":0.5905511811023622,"audio_pc":0.7480314960629921,"av_pc":0.7007874015748031,"SA":0.8976377952755905,"PC":0.44881889763779526,"Both":0.4330708661417323},"C2":{"video_sa":0.8952380952380953,"audio_sa":0.8857142857142857,"video_pc":0.6666666666666666,"audio_pc":0.7047619047619048,"av_pc":0.7047619047619048,"SA":0.8095238095238095,"PC":0.5238095238095238,"Both":0.5142857142857142},"C3":{"video_sa":0.8888888888888888,"audio_sa":0.9722222222222222,"video_pc":0.6666666666666666,"audio_pc":0.75,"av_pc":0.7222222222222222,"SA":0.8888888888888888,"PC":0.5,"Both":0.4722222222222222},"anti":{"video_sa":0.8301886792452831,"audio_sa":0.6415094339622641,"video_pc":0.6792452830188679,"audio_pc":0.6415094339622641,"av_pc":0.4339622641509434,"SA":0.5283018867924528,"PC":0.3584905660377358,"Both":0.1509433962264151}},"Veo-3.1":{"physics":{"video_sa":0.9029850746268657,"audio_sa":0.9253731343283582,"video_pc":0.582089552238806,"audio_pc":0.746268656716418,"av_pc":0.6417910447761194,"SA":0.8470149253731343,"PC":0.44402985074626866,"Both":0.4291044776119403},"overall":{"video_sa":0.8785046728971962,"audio_sa":0.881619937694704,"video_pc":0.5887850467289719,"audio_pc":0.7227414330218068,"av_pc":0.616822429906542,"SA":0.7881619937694704,"PC":0.42679127725856697,"Both":0.3894080996884735},"C1":{"video_sa":0.9212598425196851,"audio_sa":0.9133858267716536,"video_pc":0.5196850393700787,"audio_pc":0.7716535433070866,"av_pc":0.6299212598425197,"SA":0.84251968503937,"PC":0.3779527559055118,"Both":0.36220472440944884},"C2":{"video_sa":0.9142857142857143,"audio_sa":0.9428571428571428,"video_pc":0.6571428571428571,"audio_pc":0.6952380952380952,"av_pc":0.6476190476190476,"SA":0.8761904761904762,"PC":0.49523809523809526,"Both":0.4857142857142857},"C3":{"video_sa":0.8055555555555556,"audio_sa":0.9166666666666666,"video_pc":0.5833333333333334,"audio_pc":0.8055555555555556,"av_pc":0.6666666666666666,"SA":0.7777777777777778,"PC":0.5277777777777778,"Both":0.5},"anti":{"video_sa":0.7547169811320755,"audio_sa":0.660377358490566,"video_pc":0.6226415094339622,"audio_pc":0.6037735849056604,"av_pc":0.49056603773584906,"SA":0.49056603773584906,"PC":0.33962264150943394,"Both":0.18867924528301888}},"LTX-2.3":{"physics":{"video_sa":0.5932835820895522,"audio_sa":0.7425373134328358,"video_pc":0.3656716417910448,"audio_pc":0.5261194029850746,"av_pc":0.4253731343283582,"SA":0.5298507462686567,"PC":0.2574626865671642,"Both":0.25},"overall":{"video_sa":0.5638629283489096,"audio_sa":0.7040498442367601,"video_pc":0.3613707165109034,"audio_pc":0.5264797507788161,"av_pc":0.3956386292834891,"SA":0.4766355140186916,"PC":0.2398753894080997,"Both":0.21806853582554517},"C1":{"video_sa":0.6456692913385826,"audio_sa":0.7480314960629921,"video_pc":0.4251968503937008,"audio_pc":0.6456692913385826,"av_pc":0.4881889763779528,"SA":0.5511811023622047,"PC":0.2755905511811024,"Both":0.25984251968503935},"C2":{"video_sa":0.5904761904761905,"audio_sa":0.7238095238095238,"video_pc":0.3238095238095238,"audio_pc":0.4380952380952381,"av_pc":0.3523809523809524,"SA":0.5523809523809524,"PC":0.24761904761904763,"Both":0.24761904761904763},"C3":{"video_sa":0.4166666666666667,"audio_sa":0.7777777777777778,"video_pc":0.2777777777777778,"audio_pc":0.3611111111111111,"av_pc":0.4166666666666667,"SA":0.3888888888888889,"PC":0.2222222222222222,"Both":0.2222222222222222},"anti":{"video_sa":0.41509433962264153,"audio_sa":0.5094339622641509,"video_pc":0.33962264150943394,"audio_pc":0.5283018867924528,"av_pc":0.24528301886792453,"SA":0.20754716981132076,"PC":0.1509433962264151,"Both":0.05660377358490566}},"Ovi":{"physics":{"video_sa":0.5410447761194029,"audio_sa":0.7611940298507462,"video_pc":0.26865671641791045,"audio_pc":0.5149253731343284,"av_pc":0.3358208955223881,"SA":0.4925373134328358,"PC":0.19402985074626866,"Both":0.1865671641791045},"overall":{"video_sa":0.5451713395638629,"audio_sa":0.735202492211838,"video_pc":0.30218068535825543,"audio_pc":0.5264797507788161,"av_pc":0.3395638629283489,"SA":0.46417445482866043,"PC":0.19937694704049844,"Both":0.16822429906542055},"C1":{"video_sa":0.5984251968503937,"audio_sa":0.7795275590551181,"video_pc":0.33070866141732286,"audio_pc":0.6771653543307087,"av_pc":0.4330708661417323,"SA":0.5511811023622047,"PC":0.2440944881889764,"Both":0.2283464566929134},"C2":{"video_sa":0.5523809523809524,"audio_sa":0.7047619047619048,"video_pc":0.22857142857142856,"audio_pc":0.3619047619047619,"av_pc":0.2571428571428571,"SA":0.49523809523809526,"PC":0.1619047619047619,"Both":0.1619047619047619},"C3":{"video_sa":0.3055555555555556,"audio_sa":0.8611111111111112,"video_pc":0.16666666666666666,"audio_pc":0.3888888888888889,"av_pc":0.2222222222222222,"SA":0.2777777777777778,"PC":0.1111111111111111,"Both":0.1111111111111111},"anti":{"video_sa":0.5660377358490566,"audio_sa":0.6037735849056604,"video_pc":0.4716981132075472,"audio_pc":0.5849056603773585,"av_pc":0.3584905660377358,"SA":0.32075471698113206,"PC":0.22641509433962265,"Both":0.07547169811320754}},"JavisDiT++":{"physics":{"video_sa":0.417910447761194,"audio_sa":0.7798507462686567,"video_pc":0.22761194029850745,"audio_pc":0.4962686567164179,"av_pc":0.30597014925373134,"SA":0.3805970149253731,"PC":0.16044776119402984,"Both":0.1455223880597015},"overall":{"video_sa":0.40809968847352024,"audio_sa":0.7601246105919003,"video_pc":0.22741433021806853,"audio_pc":0.5046728971962616,"av_pc":0.29283489096573206,"SA":0.35202492211838005,"PC":0.1588785046728972,"Both":0.1308411214953271},"C1":{"video_sa":0.4566929133858268,"audio_sa":0.7795275590551181,"video_pc":0.28346456692913385,"audio_pc":0.6850393700787402,"av_pc":0.4094488188976378,"SA":0.3937007874015748,"PC":0.1968503937007874,"Both":0.18110236220472442},"C2":{"video_sa":0.4380952380952381,"audio_sa":0.7523809523809524,"video_pc":0.2,"audio_pc":0.3904761904761905,"av_pc":0.22857142857142856,"SA":0.42857142857142855,"PC":0.14285714285714285,"Both":0.13333333333333333},"C3":{"video_sa":0.2222222222222222,"audio_sa":0.8611111111111112,"video_pc":0.1111111111111111,"audio_pc":0.1388888888888889,"av_pc":0.16666666666666666,"SA":0.19444444444444445,"PC":0.08333333333333333,"Both":0.05555555555555555},"anti":{"video_sa":0.3584905660377358,"audio_sa":0.660377358490566,"video_pc":0.22641509433962265,"audio_pc":0.5471698113207547,"av_pc":0.22641509433962265,"SA":0.20754716981132076,"PC":0.1509433962264151,"Both":0.05660377358490566}},"MagiHuman":{"physics":{"video_sa":0.2798507462686567,"audio_sa":0.48134328358208955,"video_pc":0.16417910447761194,"audio_pc":0.33955223880597013,"av_pc":0.20149253731343283,"SA":0.23134328358208955,"PC":0.11194029850746269,"Both":0.1044776119402985},"overall":{"video_sa":0.30218068535825543,"audio_sa":0.48286604361370716,"video_pc":0.19937694704049844,"audio_pc":0.3613707165109034,"av_pc":0.22429906542056074,"SA":0.2398753894080997,"PC":0.14330218068535824,"Both":0.11838006230529595},"C1":{"video_sa":0.3858267716535433,"audio_sa":0.5354330708661418,"video_pc":0.23622047244094488,"audio_pc":0.48031496062992124,"av_pc":0.2992125984251969,"SA":0.31496062992125984,"PC":0.1732283464566929,"Both":0.16535433070866143},"C2":{"video_sa":0.19047619047619047,"audio_sa":0.3904761904761905,"video_pc":0.0761904761904762,"audio_pc":0.20952380952380953,"av_pc":0.10476190476190476,"SA":0.1523809523809524,"PC":0.0380952380952381,"Both":0.0380952380952381},"C3":{"video_sa":0.16666666666666666,"audio_sa":0.5555555555555556,"video_pc":0.16666666666666666,"audio_pc":0.2222222222222222,"av_pc":0.1388888888888889,"SA":0.16666666666666666,"PC":0.1111111111111111,"Both":0.08333333333333333},"anti":{"video_sa":0.41509433962264153,"audio_sa":0.49056603773584906,"video_pc":0.37735849056603776,"audio_pc":0.4716981132075472,"av_pc":0.33962264150943394,"SA":0.2830188679245283,"PC":0.3018867924528302,"Both":0.18867924528301888}}}}</script>
+
+<script>
+(function () {
+  const lbData = JSON.parse(document.getElementById("lb-data").textContent);
+  const MODELS = ["Seedance-2.0", "Kling-3.0-Omni", "Veo-3.1", "LTX-2.3", "Ovi", "JavisDiT++", "MagiHuman"];
+  const DISPLAY = {"Seedance-2.0": "Seedance 2.0", "Kling-3.0-Omni": "Kling 3.0 Omni", "Veo-3.1": "Veo 3.1", "LTX-2.3": "LTX-2.3", "Ovi": "Ovi 1.1", "JavisDiT++": "JavisDiT++", "MagiHuman": "MagiHuman"};
+  const ORG = {"Seedance-2.0": "ByteDance \u00b7 proprietary", "Kling-3.0-Omni": "Kuaishou \u00b7 proprietary", "Veo-3.1": "Google \u00b7 proprietary", "LTX-2.3": "Lightricks \u00b7 open", "Ovi": "character.ai \u00b7 open", "JavisDiT++": "JavisDiT \u00b7 open", "MagiHuman": "GAIR-NLP \u00b7 open"};
+  let evType = "human", partition = "physics";
+
+  function fmt(v) {
+    if (v === null || v === undefined) return "—";
+    return v.toFixed(3);
+  }
+
+  function render() {
+    const tbody = document.querySelector("#lb-table tbody");
+    const rows = MODELS.map(m => {
+      const r = lbData[evType]?.[m]?.[partition] || {};
+      return [m, r];
+    });
+    rows.sort((a, b) => (b[1].Both || 0) - (a[1].Both || 0));
+    let out = "";
+    rows.forEach(([m, r], i) => {
+      const best = i === 0 && (r.Both != null) ? " best" : "";
+      const both = (r.Both || 0);
+      const barW = Math.round(both * 100);
+      out += `<tr class="${best.trim()}">
+        <td class="rank num">${i + 1}</td>
+        <td class="model">${DISPLAY[m]}<span class="meta">${ORG[m]}</span></td>
+        <td class="num">${fmt(r.SA)}</td>
+        <td class="num">${fmt(r.PC)}</td>
+        <td class="num headline">
+          <span class="score-cell">${fmt(r.Both)}
+            <span class="score-bar"><i style="width:${barW}%"></i></span>
+          </span>
+        </td>
+        <td class="num">${fmt(r.video_sa)}</td>
+        <td class="num">${fmt(r.audio_sa)}</td>
+        <td class="num">${fmt(r.video_pc)}</td>
+        <td class="num">${fmt(r.audio_pc)}</td>
+        <td class="num">${fmt(r.av_pc)}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = out;
+  }
+
+  document.querySelectorAll("#eval-toggle button").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#eval-toggle button").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      evType = b.dataset.et;
+      render();
+    });
+  });
+  document.querySelectorAll("#partition-toggle button").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#partition-toggle button").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      partition = b.dataset.partition;
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</article>
+<footer class="footer">
+  <span>© AV-Phys Bench 2026. Theme forked from <a href="https://github.com/Renovamen/renovamen.github.io" target="_blank" rel="noopener noreferrer">renovamen</a>.</span>
+  <span class="right">
+    <a href="https://github.com/ZijunCui02/AV-Phys" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-code"/></svg><span>Code</span></a>
+    <a href="https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-hf"/></svg><span>Data</span></a>
+    <a href="https://arxiv.org/abs/2605.07061" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#i-arxiv"/></svg><span>arXiv</span></a>
+  </span>
+</footer>
+</main>
+<script src="/AV-Phys/theme.js"></script>
+</body>
+</html>
