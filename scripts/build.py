@@ -26,6 +26,7 @@ import re
 import shutil
 import sys
 from collections import defaultdict
+from datetime import date
 from pathlib import Path
 
 # ---------- Models ----------------------------------------------------------
@@ -79,6 +80,16 @@ HF_BASE = "https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench/resolve/main"
 GH_CODE = "https://github.com/ZijunCui02/AV-Phys"
 HF_DATASET = "https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench"
 ARXIV = "https://arxiv.org/abs/2605.07061"
+
+# Canonical origin of the deployed site. Canonical/OG/sitemap URLs always use
+# this, independent of --base-url, so mirrors (e.g. *.github.io) point back here.
+CANON = "https://zijuncui.com/AV-Phys"
+OG_IMAGE = f"{CANON}/assets/og-card.jpg"
+PAPER_TITLE = "Do Joint Audio-Video Generation Models Understand Physics?"
+DESC_DEFAULT = (
+    "AV-Phys Bench — benchmarking physical commonsense in joint audio-video "
+    "generation. Leaderboard, dataset, and per-prompt video gallery."
+)
 
 # Base URL prefix for all internal links. Set via --base-url (e.g. "/AV-Phys").
 # Default empty → site is served at the host root.
@@ -321,15 +332,38 @@ FOOTER_HTML = f"""<footer class="footer">
 </footer>"""
 
 
-def page_shell(title, body, active):
+def _esc(s):
+    return (
+        s.replace("&", "&amp;")
+        .replace('"', "&quot;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+
+
+def page_shell(title, body, active, path="/", desc=DESC_DEFAULT, extra_head=""):
+    canon = CANON + path
+    t = _esc(title)
+    d = _esc(desc)
     return f"""<!DOCTYPE html>
 <html lang="en" class="theme-auto">
 <head>
 <meta charset="UTF-8">
-<title>{title}</title>
+<title>{t}</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="AV-Phys Bench — benchmarking physical commonsense in joint audio-video generation. Leaderboard, dataset, and per-prompt video gallery.">
-<link rel="stylesheet" href="{BASE}/style.css">
+<meta name="description" content="{d}">
+<link rel="canonical" href="{canon}">
+<meta property="og:site_name" content="AV-Phys Bench">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{t}">
+<meta property="og:description" content="{d}">
+<meta property="og:url" content="{canon}">
+<meta property="og:image" content="{OG_IMAGE}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{t}">
+<meta name="twitter:description" content="{d}">
+<meta name="twitter:image" content="{OG_IMAGE}">
+{extra_head}<link rel="stylesheet" href="{BASE}/style.css">
 <script>
 (function () {{
   var s = localStorage.getItem("color-scheme") || "auto";
@@ -376,6 +410,62 @@ AUTHORS_HTML = """<p class="authors">
   <sup>*</sup>&nbsp;Equal contribution. &nbsp;&nbsp;
   <sup>&dagger;</sup>&nbsp;Corresponding author.
 </p>"""
+
+AUTHOR_LINKS = [
+    ("Zijun Cui", "https://zijuncui.com/"),
+    ("Xiulong Liu", "https://dragonliu1995.github.io/"),
+    ("Hao Fang", "https://apexhao.github.io/"),
+    ("Mingwei Xu", "https://scholar.google.com/citations?user=jOZPNeQAAAAJ"),
+    ("Jiageng Liu", "https://jiagengliu02.github.io/"),
+    ("Zexin Xu", "https://zexinxu.com/"),
+    ("Weiguo Pian", "https://scholar.google.com/citations?user=K-ObTwoAAAAJ"),
+    ("Shijian Deng", "https://scholar.google.com/citations?user=7LBj70IAAAAJ"),
+    ("Feiyu Du", None),
+    ("Chenming Ge", None),
+    ("Yapeng Tian", "https://www.yapengtian.com/"),
+]
+
+
+def index_jsonld():
+    authors = []
+    for name, url in AUTHOR_LINKS:
+        person = {"@type": "Person", "name": name}
+        if url:
+            person["url"] = url
+        authors.append(person)
+    article = {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "headline": PAPER_TITLE,
+        "alternativeHeadline": "AV-Phys Bench",
+        "url": CANON + "/",
+        "mainEntityOfPage": CANON + "/",
+        "image": OG_IMAGE,
+        "author": authors,
+        "datePublished": "2026-05",
+        "description": DESC_DEFAULT,
+        "keywords": (
+            "audio-video generation, physical commonsense, benchmark, "
+            "video generation, audio generation, world models, evaluation"
+        ),
+        "sameAs": [ARXIV],
+    }
+    dataset = {
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "AV-Phys-Bench",
+        "url": HF_DATASET,
+        "sameAs": [CANON + "/"],
+        "description": (
+            "Prompts, per-prompt physics rubrics, generated videos from seven "
+            "joint audio-video generation models, and human ratings."
+        ),
+        "creator": authors,
+        "isAccessibleForFree": True,
+        "distribution": [{"@type": "DataDownload", "contentUrl": HF_DATASET}],
+    }
+    payload = json.dumps([article, dataset], separators=(",", ":"))
+    return f'<script type="application/ld+json">{payload}</script>\n'
 
 
 def leaderboard_body(prompts, leaderboard):
@@ -883,7 +973,19 @@ def build(release: Path, src: Path, out: Path, base_url: str = ""):
     print(f"[build] writing index.html ...")
     body = leaderboard_body(prompts, leaderboard)
     (out / "index.html").write_text(
-        page_shell("AV-Phys Bench — Leaderboard", body, active=""),
+        page_shell(
+            f"AV-Phys Bench: {PAPER_TITLE}",
+            body,
+            active="",
+            path="/",
+            desc=(
+                "The first comprehensive benchmark for physical commonsense in "
+                "joint audio-video generation: a leaderboard of seven models "
+                "(Veo 3.1, Seedance 2.0, Kling 3.0 Omni, ...), 321 prompts with "
+                "rubrics, and human ratings."
+            ),
+            extra_head=index_jsonld(),
+        ),
         encoding="utf-8",
     )
 
@@ -894,7 +996,17 @@ def build(release: Path, src: Path, out: Path, base_url: str = ""):
     print(f"[build] writing videos/index.html ...")
     (out / "videos").mkdir(exist_ok=True)
     (out / "videos" / "index.html").write_text(
-        page_shell("AV-Phys Bench — Videos", gallery_body(prompts), active="videos"),
+        page_shell(
+            "AV-Phys Bench — Per-Prompt Video Gallery",
+            gallery_body(prompts),
+            active="videos",
+            path="/videos/",
+            desc=(
+                "Browse all 321 AV-Phys Bench prompts with generations from "
+                "seven joint audio-video models and per-prompt physics rubric "
+                "verdicts."
+            ),
+        ),
         encoding="utf-8",
     )
 
@@ -902,7 +1014,17 @@ def build(release: Path, src: Path, out: Path, base_url: str = ""):
     print(f"[build] writing tl-dr/index.html ...")
     (out / "tl-dr").mkdir(exist_ok=True)
     (out / "tl-dr" / "index.html").write_text(
-        page_shell("AV-Phys Bench — TL;DR", tldr_body(), active="tldr"),
+        page_shell(
+            "AV-Phys Bench — TL;DR",
+            tldr_body(),
+            active="tldr",
+            path="/tl-dr/",
+            desc=(
+                "A one-minute tour of AV-Phys Bench: how we probe physical "
+                "commonsense in joint audio-video generation and where seven "
+                "state-of-the-art models fail."
+            ),
+        ),
         encoding="utf-8",
     )
 
@@ -914,12 +1036,38 @@ def build(release: Path, src: Path, out: Path, base_url: str = ""):
         out_dir = out / "videos" / idx
         out_dir.mkdir(exist_ok=True)
         body = prompt_page_body(prompt, rubric)
+        ptext = prompt["prompt"].strip()
+        if len(ptext) > 200:
+            ptext = ptext[:197] + "..."
         (out_dir / "index.html").write_text(
-            page_shell(f"{idx} · AV-Phys Bench", body, active="videos"),
+            page_shell(
+                f"{idx} · AV-Phys Bench",
+                body,
+                active="videos",
+                path=f"/videos/{idx}/",
+                desc=(
+                    f'AV-Phys Bench prompt {idx}: "{ptext}" Generations from '
+                    "seven audio-video models with physics rubric verdicts."
+                ),
+            ),
             encoding="utf-8",
         )
         if (i + 1) % 50 == 0:
             print(f"[build]   {i+1}/{len(prompts)} pages")
+
+    # 7. Sitemap for the deployed site.
+    urls = [CANON + "/", CANON + "/tl-dr/", CANON + "/videos/"]
+    urls += [f"{CANON}/videos/{p['index']}/" for p in prompts]
+    today = date.today().isoformat()
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for u in urls:
+        lines.append(f"  <url><loc>{u}</loc><lastmod>{today}</lastmod></url>")
+    lines.append("</urlset>")
+    (out / "sitemap.xml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"[build] sitemap.xml with {len(urls)} URLs")
 
     print(f"[build] done.")
 
