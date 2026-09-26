@@ -486,6 +486,7 @@ def leaderboard_body(prompts, leaderboard):
 
 <section class="hero">
   <h1 class="paper-title">Do Joint Audio-Video Generation Models Understand Physics?</h1>
+  <p class="venue">NeurIPS 2026 &middot; Evaluations &amp; Datasets Track</p>
   {AUTHORS_HTML}
   <div class="badges">
     <a class="btn" href="{ARXIV}" target="_blank" rel="noopener noreferrer">
