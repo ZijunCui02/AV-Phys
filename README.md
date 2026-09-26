@@ -1,10 +1,12 @@
 # Do Joint Audio-Video Generation Models Understand Physics?
 
+### NeurIPS 2026 · Evaluations & Datasets Track
+
 [![arXiv](https://img.shields.io/badge/arXiv-2605.07061-b31b1b.svg)](https://arxiv.org/abs/2605.07061)
 [![Project Page](https://img.shields.io/badge/Project%20Page-zijuncui.com%2FAV--Phys-blue)](https://zijuncui.com/AV-Phys/)
 [![HF Dataset](https://img.shields.io/badge/Dataset-AV--Phys--Bench-yellow)](https://huggingface.co/datasets/ZijunCui/AV-Phys-Bench)
 
-#### [Zijun Cui](https://zijuncui.com/)<sup>1,*</sup>, [Xiulong Liu](https://dragonliu1995.github.io/)<sup>2,*</sup>, [Hao Fang](https://apexhao.github.io/)<sup>2,*</sup>, [Mingwei Xu](https://scholar.google.com/citations?user=jOZPNeQAAAAJ&hl=zh-CN)<sup>2</sup>, [Jiageng Liu](https://jiagengliu02.github.io/)<sup>3</sup>, [Zexin Xu](https://zexinxu.com/)<sup>1</sup>, [Weiguo Pian](https://scholar.google.com/citations?user=K-ObTwoAAAAJ&hl=zh-CN)<sup>1</sup>, [Shijian Deng](https://scholar.google.com/citations?user=7LBj70IAAAAJ&hl=en)<sup>1</sup>, Feiyu Du<sup>1</sup>, Chenming Ge<sup>2</sup>, [Yapeng Tian](https://www.yapengtian.com/)<sup>1,†</sup>
+#### [Zijun Cui](https://zijuncui.com/)<sup>1,\*</sup>, [Xiulong Liu](https://dragonliu1995.github.io/)<sup>2,\*</sup>, [Hao Fang](https://apexhao.github.io/)<sup>2,\*</sup>, [Mingwei Xu](https://scholar.google.com/citations?user=jOZPNeQAAAAJ&hl=zh-CN)<sup>2</sup>, [Jiageng Liu](https://jiagengliu02.github.io/)<sup>3</sup>, [Zexin Xu](https://zexinxu.com/)<sup>1</sup>, [Weiguo Pian](https://scholar.google.com/citations?user=K-ObTwoAAAAJ&hl=zh-CN)<sup>1</sup>, [Shijian Deng](https://scholar.google.com/citations?user=7LBj70IAAAAJ&hl=en)<sup>1</sup>, Feiyu Du<sup>1</sup>, Chenming Ge<sup>2</sup>, [Yapeng Tian](https://www.yapengtian.com/)<sup>1,†</sup>
 
 <sup>1</sup> University of Texas at Dallas &nbsp;&nbsp; <sup>2</sup> University of Washington &nbsp;&nbsp; <sup>3</sup> University of California, Los Angeles
 
