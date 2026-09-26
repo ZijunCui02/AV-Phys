@@ -23,7 +23,7 @@ pip install -r requirements.txt
 export GOOGLE_API_KEY=<your AI Studio key>     # or GEMINI_API_KEY
 ```
 
-Each evaluator uses the [google-genai](https://pypi.org/project/google-genai/) SDK against the AI Studio API. The audio agents additionally use `librosa`, `soundfile`, and `ffmpeg` for DSP measurements; the visual agents use `Pillow` and `ffmpeg` for frame extraction.
+Each evaluator uses the [google-genai](https://pypi.org/project/google-genai/) SDK against the AI Studio API. The audio agents additionally use `librosa`, `soundfile`, and `ffmpeg` for DSP measurements, `praat-parselmouth` for pitch tracking, and `pyloudnorm` for LUFS loudness; the visual agents use `Pillow` and `ffmpeg` for frame extraction.
 
 `ffmpeg` must be on `PATH`. On Ubuntu: `sudo apt install ffmpeg`.
 
