@@ -16,7 +16,7 @@
 
 🎧 **Please put on headphones.** AV-Phys Bench is about audio as much as it is about video, and many of the failures shown here are easier to hear than they are to see.
 
-https://github.com/user-attachments/assets/7fe6d024-34ad-4246-b8c1-ba03c0a4a3be
+https://github.com/user-attachments/assets/838cbd5c-2086-48bc-ba19-8ffd5a36c01f
 
 ***
 
