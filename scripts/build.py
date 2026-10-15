@@ -399,7 +399,7 @@ AUTHORS_HTML = """<p class="authors">
   <a href="https://zexinxu.com/" target="_blank" rel="noopener noreferrer">Zexin&nbsp;Xu</a><sup>1</sup>,
   <a href="https://scholar.google.com/citations?user=K-ObTwoAAAAJ&amp;hl=zh-CN" target="_blank" rel="noopener noreferrer">Weiguo&nbsp;Pian</a><sup>1</sup>,
   <a href="https://scholar.google.com/citations?user=7LBj70IAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Shijian&nbsp;Deng</a><sup>1</sup>,
-  Feiyu&nbsp;Du<sup>1</sup>, Chenming&nbsp;Ge<sup>2</sup>,
+  <a href="https://feiyu-du.github.io/" target="_blank" rel="noopener noreferrer">Feiyu&nbsp;Du</a><sup>1</sup>, Chenming&nbsp;Ge<sup>2</sup>,
   <a href="https://www.yapengtian.com/" target="_blank" rel="noopener noreferrer">Yapeng&nbsp;Tian</a><sup>1,&dagger;</sup>
 </p>
 <p class="affil">
@@ -420,7 +420,7 @@ AUTHOR_LINKS = [
     ("Zexin Xu", "https://zexinxu.com/"),
     ("Weiguo Pian", "https://scholar.google.com/citations?user=K-ObTwoAAAAJ"),
     ("Shijian Deng", "https://scholar.google.com/citations?user=7LBj70IAAAAJ"),
-    ("Feiyu Du", None),
+    ("Feiyu Du", "https://feiyu-du.github.io/"),
     ("Chenming Ge", None),
     ("Yapeng Tian", "https://www.yapengtian.com/"),
 ]
