@@ -90,6 +90,8 @@ python -m agent_av.evaluate_videos \
 
 Each per-prompt output JSON includes the verdict on every rubric statement, the aggregated pass per aspect (`video_sa`, `audio_sa`, `video_pc`, `audio_pc`, `av_pc`), and the combined `SA`, `PC`, and `Both` scores used in the paper. See [code/README.md](./code/README.md) for the full output schema and the audio-only and visual-only agent variants.
 
+To run the same evaluators on the open-source Qwen3-Omni backbone, see [`code/qwen`](code/qwen).
+
 ## Score Your Own Model
 
 Generate one MP4 per prompt and place the videos under your own model directory.

@@ -11,7 +11,8 @@ code/
 ├── mllm/            MLLM-as-judge baseline
 ├── agent_audio/     ReAct agent with audio tools (AV-Phys Agent)
 ├── agent_visual/    ReAct agent with frame inspection tools
-└── agent_av/        ReAct agent with both audio DSP and visual tools
+├── agent_av/        ReAct agent with both audio DSP and visual tools
+└── qwen/            The same evaluators on the Qwen3-Omni backbone
 ```
 
 Every evaluator reads the dataset's `prompts.csv`, the per-prompt rubrics under `rubrics/{INDEX}.json`, and the generated videos under `videos/{model}/{INDEX}.mp4`. Each writes a per-prompt JSON of the form `{judge_model}/{generator_model}/{INDEX}.json` under its output root.
